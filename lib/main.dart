@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   var fsconnect = FirebaseFirestore.instance;
 
   myget() async {
-    var d = await fsconnect.collection('books')
+     await fsconnect.collection('books')
         .doc('lotto')
         .get()
         .then((DocumentSnapshot ds) {
