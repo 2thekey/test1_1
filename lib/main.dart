@@ -13,7 +13,12 @@ class MyApp extends StatelessWidget {
 
   myget() async {
     var d = await fsconnect.collection("books").doc("lotto").get();
-    print(d.data());
+    //print(d.data());
+    var bbb=d.data().toString();
+    var arr=bbb.split('/');
+    print(arr);
+    print(arr[0]);
+    print(arr[8]);
     // print(d.docs[0].data());
 
     // for (var i in d.docs) {
@@ -48,8 +53,10 @@ class MyApp extends StatelessWidget {
                   print("get data ...");
                 },
               )
+
             ],
           ),
+
         ));
   }
 }
