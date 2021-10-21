@@ -12,13 +12,26 @@ class MyApp extends StatelessWidget {
   var fsconnect = FirebaseFirestore.instance;
 
   myget() async {
-    var d = await fsconnect.collection("books").doc("lotto").get();
-    //print(d.data());
-    var bbb=d.data().toString();
-    var arr=bbb.split('/');
-    print(arr);
-    print(arr[0]);
-    print(arr[8]);
+    var d = await fsconnect.collection('books')
+        .doc('lotto')
+        .get()
+        .then((DocumentSnapshot ds) {
+      // ignore: unnecessary_statements
+     var dd=ds.data()['bunho'];
+     print(dd);
+    }
+    );
+
+   //print(d);
+
+    // var bbb=d.data().toString();
+    // print(bbb);
+    // var arr=bbb.split('/');
+    //
+    // print(arr[0]);
+    // print(arr[8]);
+
+
     // print(d.docs[0].data());
 
     // for (var i in d.docs) {
