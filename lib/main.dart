@@ -1,182 +1,119 @@
+import 'dart:async';
+
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-void main() => runApp(App());
+var num=List.generate(1000,(i) => List(10), growable:false);
 
+void main() async {
+  // int lotto_cha=1;
+  // String url= "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=$lotto_cha";
+  // var response = await http.get(url);
+  //
+  // Map<String, dynamic> lotto = json.decode(response.body);
+  //
+  // num[lotto_cha][0] = lotto["drwNo"];
+  // num[lotto_cha][1] = lotto["drwNoDate"];
+  // num[lotto_cha][2] = lotto["drwtNo1"];
+  // num[lotto_cha][3] = lotto["drwtNo2"];
+  // num[lotto_cha][4] = lotto["drwtNo3"];
+  // num[lotto_cha][5] = lotto["drwtNo4"];
+  // num[lotto_cha][6] = lotto["drwtNo5"];
+  // num[lotto_cha][7] = lotto["drwtNo6"];
+  // num[lotto_cha][8] = lotto["bnusNo"];
+  // num[lotto_cha][9] = lotto["returnValue"];
+  // lotto_cha++;
+  //
+  //
+  // while(num[lotto_cha-1][9]=="success") {
+  //   url = "https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=$lotto_cha";
+  //   response = await http.get(url);
+  //   lotto = json.decode(response.body);
+  //   num[lotto_cha][0] = lotto["drwNo"];
+  //   num[lotto_cha][1] = lotto["drwNoDate"];
+  //   num[lotto_cha][2] = lotto["drwtNo1"];
+  //   num[lotto_cha][3] = lotto["drwtNo2"];
+  //   num[lotto_cha][4] = lotto["drwtNo3"];
+  //   num[lotto_cha][5] = lotto["drwtNo4"];
+  //   num[lotto_cha][6] = lotto["drwtNo5"];
+  //   num[lotto_cha][7] = lotto["drwtNo6"];
+  //   num[lotto_cha][8] = lotto["bnusNo"];
+  //   num[lotto_cha][9] = lotto["returnValue"];
+  //
+  //   lotto_cha++;
+  // } //while
+  //
+  //
+  // print('aa');
+  //  print(num[980]);
 
-
-class App extends StatefulWidget {
-  _AppState createState() => _AppState();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
-class _AppState extends State<App> {
-  // Set default `_initialized` and `_error` state to false
-  bool _initialized = false;
-  bool _error = false;
-
-  // Define an async function to initialize FlutterFire
-  void initializeFlutterFire() async {
-    try {
-      // Wait for Firebase to initialize and set `_initialized` state to true
-      await Firebase.initializeApp();
-      setState(() {
-        _initialized = true;
-      });
-    } catch(e) {
-      // Set `_error` state to true if Firebase initialization fails
-      setState(() {
-        _error = true;
-      });
-    }
-  }
-
+class MyApp extends StatefulWidget {
   @override
-  void initState() {
-    initializeFlutterFire();
-    super.initState();
-  }
+  _MyAppState createState() => _MyAppState();
+}
+class _MyAppState extends State<MyApp> {
+  //FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
-    // Show error message if initialization failed
-    if(_error) {
-      return SomethingWentWrong();
-    }
+    CollectionReference fireStore = FirebaseFirestore.instance.collection('books');
+    return FutureBuilder<DocumentSnapshot>(
+        future: fireStore.doc('lotto').get(),
+        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          return MaterialApp(
+            home: Scaffold(
+              appBar: AppBar(
+                title: Text("hello world"),
+              ),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  ElevatedButton(
+                    //color: Colors.blue,
+                    child: Text("create button",style: TextStyle(color : Colors.white)),
+                    onPressed: (){
+                      //클릭시 데이터를 추가해준다.
+                    },
+                  ),
+                  ElevatedButton(
+                    //color: Colors.blue,
+                    child: Text("read button", style: TextStyle(color : Colors.white)),
+                    onPressed: (){
 
-    // Show a loader until FlutterFire is initialized
-    if (!_initialized) {
-      return Loading();
-    }
-
-    return MyApp();
-  }
-}
-
-class SomethingWentWrong extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: "SomethingWentWrong",
-        home:Scaffold(
-            appBar: AppBar(title:Text("SomethingWentWrong!!")),
-            body:Text("SomethingWentWrong!!!!")
-
-        )
-
-    );
-  }
-}
-
-class Loading extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: "Loading",
-        home:Scaffold(
-            appBar: AppBar(title:Text("Loading!!")),
-            body:Text("Loading!!!!")
-
-        )
-
-    );
-  }
-}
+                      Map<String, dynamic> data = snapshot.data.data() as Map<String, dynamic>;
+                      print(data['bunho'] );
 
 
-final dummySnapshot = [
-  {"name": "Filip", "votes": 15},
-  {"name": "Abraham", "votes": 14},
-  {"name": "Richard", "votes": 11},
-  {"name": "Ike", "votes": 10},
-  {"name": "Justin", "votes": 1},
-];
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Baby Names',
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() {
-    return _MyHomePageState();
-  }
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Baby Name Votes')),
-      body: _buildBody(context),
-    );
-  }
-
-  Widget _buildBody(BuildContext context) {
-    // // TODO: get actual snapshot from Cloud Firestore
-    // return _buildList(context, dummySnapshot);
-
-    return StreamBuilder<QuerySnapshot>(
-      stream:FirebaseFirestore.instance.collection("baby").snapshots(),
-      builder: (context, snapshot){
-        if(!snapshot.hasData){
-          return LinearProgressIndicator();
+                    },
+                  ),
+                  ElevatedButton(
+                    //color: Colors.blue,
+                    child: Text("update button", style: TextStyle(color : Colors.white)),
+                    onPressed: (){
+                      //클릭시 데이터를 갱신해준다.
+                    },
+                  ),
+                  ElevatedButton(
+                    //color: Colors.blue,
+                    child: Text("delete button", style: TextStyle(color : Colors.white)),
+                    onPressed: (){
+                      //클릭시 데이터를 삭제해 준다.
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
         }
-
-        return _buildList(context, snapshot.data.docs);
-      },
     );
   }
-
-  Widget _buildList(BuildContext context,
-      List<QueryDocumentSnapshot> snapshot) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, QueryDocumentSnapshot data) {
-    final record = Record.fromSnapshot(data);
-
-    return Padding(
-      key: ValueKey(record.name),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        child: ListTile(
-            title: Text(record.name),
-            trailing: Text(record.votes.toString()),
-            onTap: () => record.reference.update({'vote':FieldValue.increment(1)})
-        ),
-      ),
-    );
-  }
-}
-
-class Record {
-  final String name;
-  final int votes;
-  final DocumentReference reference;
-
-  Record.fromMap(Map<String, dynamic> map, {this.reference})
-      : assert(map['name'] != null),
-        assert(map['vote'] != null),
-        name = map['name'],
-        votes = map['vote'];
-
-  Record.fromSnapshot(QueryDocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data(), reference: snapshot.reference);
-
-  @override
-  String toString() => "Record<$name:$votes>";
 }
