@@ -15,15 +15,23 @@ class MyApp extends StatelessWidget {
 
 
   myget() async {
-    await fsconnect.collection('books')
-        .doc('lotto')
-        .get()
-        .then((DocumentSnapshot ds) {
-      // ignore: unnecessary_statements
-      dd=ds.data()['bunho'];
-      //print(dd);
+
+    var data = await fsconnect.collection('naepo_lotto').get();
+    var details = data.docs.toList();
+
+    details.forEach((d) {
+      print(d.drwNo);
+    });
+
+    // await fsconnect.collection('books')
+    //     .doc('lotto')
+    //     .get()
+    //     .then((DocumentSnapshot ds) {
+    //   // ignore: unnecessary_statements
+    //   dd=ds.data()['bunho'];
+    //   //print(dd);
     }
-    );
+
 
 
   }
