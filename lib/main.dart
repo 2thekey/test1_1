@@ -84,10 +84,10 @@ class _MyAppState extends State<MyApp> {
               ),
 
               RaisedButton(
-                child: Text('$a1 - 번호검증'),
+                child: Text('최저의수'),
                 onPressed: () {
 
-                  dangchum();
+                  good_num();
 
 
                 },
@@ -1193,6 +1193,85 @@ class _MyAppState extends State<MyApp> {
     hamkke_num=imsinum;
     print(hamkke_num);
   }
+
+  void good_num(){
+    var iiii = 0;
+
+    List<dynamic> total_good=new List(8145060);
+    List<int> total_good_jumsoo=new List(8145060);
+    List<int> input_Num2;
+
+    for (int a = 1; a <= 40; ++ a) {
+      for (int b = a + 1; b <= 41; ++ b) {
+        for (int c = b + 1; c <= 42; ++ c) {
+          for (int d = c + 1; d <= 43; ++ d) {
+            for (int e = d + 1; e <= 44; ++ e) {
+              for (int f = e + 1; f <= 45; ++ f) {
+                total_good[iiii].add('$a, $b, $c, $d, $e, $f');
+                input_Num2[0]=a;
+                input_Num2[1]=b;
+                input_Num2[2]=c;
+                input_Num2[3]=d;
+                input_Num2[4]=e;
+                input_Num2[5]=f;
+
+                dangchum5.clear();
+                dangchum4.clear();
+                dangchum3.clear();
+                dangchum2.clear();
+                dangchum1.clear();
+
+                int dang=0;
+
+                input_Num.sort();
+                dangchum1.add(0);
+                dangchum2.add(0);
+                dangchum3.add(0);
+                dangchum4.add(0);
+                dangchum5.add(0);
+
+                for (int i =1 ; i < last_soonbun; i++) {
+                  for (int j = 1; j < 7; j++) {
+                    for (int k = 0; k < 6; k++) {
+                      if (num[i][j] == input_Num2[k]) {
+                        dang++;
+                        break;
+                      }  //if
+
+                      //  print('i:'+i.toString()+',j:'+j.toString()+',k:'+k.toString());
+
+
+                    } //for k
+                  }  //for j
+
+                  switch(dang) {
+                    case 0 :
+                    case 1 :
+                    case 2 : break; //print('NO 당첨'); break;
+                    case 3 : total_good_jumsoo[iiii]=total_good_jumsoo[iiii]+1; break;
+                    case 4 : total_good_jumsoo[iiii]=total_good_jumsoo[iiii]+10; break;
+                    case 5 : if(num[i][7]==input_Num2[0] ||  num[i][7]==input_Num2[1] || num[i][7]==input_Num2[2] || num[i][7]==input_Num2[3] || num[i][7]==input_Num2[4] || num[i][7]==input_Num2[5])
+                    {
+                      total_good_jumsoo[iiii]=total_good_jumsoo[iiii]+700; break;
+                    } //if
+                    total_good_jumsoo[iiii]=total_good_jumsoo[iiii]+200; break;
+                    case 6 : total_good_jumsoo[iiii]=total_good_jumsoo[iiii]+1000; break;
+
+                  } //switch
+                  dang=0;
+                }  //for i
+
+
+                iiii++;
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+
 
 }
 
